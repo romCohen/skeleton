@@ -41,7 +41,7 @@ jobs:
 #      # run tests!
 #      - run: gradle test
     docker:
-       - image: circleci/<language>:<version TAG>
+       - image: circleci/openjdk:8-jdk
      steps:
        - checkout
        - run: echo "hello world"
