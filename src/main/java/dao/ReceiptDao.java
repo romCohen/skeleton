@@ -4,9 +4,12 @@ import api.ReceiptResponse;
 import generated.tables.records.ReceiptsRecord;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Record1;
+import org.jooq.Result;
 import org.jooq.impl.DSL;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -33,5 +36,17 @@ public class ReceiptDao {
 
     public List<ReceiptsRecord> getAllReceipts() {
         return dsl.selectFrom(RECEIPTS).fetch();
+    }
+
+    public List<ReceiptsRecord> getReceipts(Result<Record1<Integer>> results) {
+        List<ReceiptsRecord> receipts = new ArrayList<>();
+        for (Record1<Integer> record : results) {
+            ReceiptsRecord receiptsRecord = dsl
+                    .selectFrom(RECEIPTS)
+                    .where(RECEIPTS.ID.eq(record.value1()))
+                    .fetchOne();
+            receipts.add(receiptsRecord);
+        }
+        return receipts;
     }
 }
